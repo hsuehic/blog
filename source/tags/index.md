@@ -1,6 +1,6 @@
 ---
-title: tags
-date: 2015-10-20 06:49:50
-type: "tags"
-comments: false
+layout: tags
+title: Tags
+date: 2016-12-25 20:07:29
+tags:
 ---
