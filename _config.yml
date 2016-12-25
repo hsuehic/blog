@@ -68,4 +68,9 @@ theme: icarus
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+- type: git
+  repo: git@github.com:hsuehic/hsuehic.github.io.git
+  branch: master
+- type: git
+  repo: git@github.com:hsuehic/blog.git
+  branch: gh-pages
