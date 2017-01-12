@@ -7,7 +7,7 @@ categories:
 - Mac
 - Tools
 date: 2017/01/09 02:46
-banner: http://ohmyz.sh/img/themes/nebirhos.jpg
+thumbnail: http://ohmyz.sh/img/themes/nebirhos.jpg
 ---
 换到Mac下编码刚好快一年了,感受最大的就是开发效率的提升,使用越来越顺手了,不像最初的一两个星期, 没有了Windows的开妈菜单,总觉得不方便,痛苦一两周过去后,就不想再换到windows下编码了,虽然有时候为了测试万恶的IE浏览器,还有在电脑上安装几个版本的windows的虚拟机。
 今天要说一下是用起来感觉最爽的神器zsh和oh-my-zsh。
