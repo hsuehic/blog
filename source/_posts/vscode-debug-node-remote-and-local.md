@@ -14,7 +14,7 @@ thumbnail: /images/debugging_hero.png
 barnar: /images/debugging_hero.png
 ---
 
-记录下使用VSCode 调试Node.js应用相关的内容, 包括Node debugger相关的Source maps, remote debug待。
+记录下使用VSCode 调试Node.js应用相关的内容, 包括Node debugger相关的Source maps, remote debug等。
 <!-- more -->
 
 ## VSCode 的Debugging介绍 
