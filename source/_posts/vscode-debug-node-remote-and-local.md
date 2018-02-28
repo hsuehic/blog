@@ -73,7 +73,7 @@ VSCode 编辑器内置支持Node.js运行时调试支持,可以调试JavaScript�
 - 在已经运行的Node应用进程中开启调试
 1. 查找pid
 ```bash
-ps ls | grep node
+ps | grep node
 ```
 2. 发送信号 启用调试
 ```bash
