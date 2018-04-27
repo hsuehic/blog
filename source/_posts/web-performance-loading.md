@@ -5,9 +5,12 @@ tags: Web, Performance, Loading, Precache, Service Worker
 thumbnail:
 barnar:
 ---
-## 优化加载过程
+
 
 上一往篇中前到了Web应用性能包括哪些方面,以及怎么来分析和评价应用的性能。 今天主要来说说,Web资源加载过程中可以考虑和采取的一些优化方法。
+<!-- more -->
+
+## 优化加载过程
 
 ### Minify
 - uglify, encoding
