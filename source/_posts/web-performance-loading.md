@@ -2,8 +2,8 @@
 title: 优化Web应用性能(二) 加载过程性能优化
 date: 2018-04-27 15:19:44
 tags: Web, Performance, Loading, Precache, Service Worker
-thumbnail:
-barnar:
+thumbnail: /images/light-hourse.png
+barnar: 
 ---
 
 

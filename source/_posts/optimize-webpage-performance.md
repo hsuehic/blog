@@ -7,7 +7,7 @@ tags:
 categories:
 - 前端
 - performance
-thumbnail: /images/debugging_hero.png
+thumbnail: /images/light-hourse.png
 barnar: /images/rail.png
 ---
 

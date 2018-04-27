@@ -2,7 +2,7 @@
 title: Web网站和应用无障碍访问
 date: 2018-04-29 15:48:01
 tags: Web accessibility
-thumbnail:
+thumbnail: /images/perspectives_thumb.jpg
 barnar:
 ---
 
