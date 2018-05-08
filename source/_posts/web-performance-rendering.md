@@ -1,9 +1,13 @@
 ---
 title: 优化Web应用性能(三) 渲染过程的性能优化
 date: 2018-04-28 15:20:00
-tags: Web Performance;
-thumbnail:
-barnar:
+tags: 
+- Web Performance
+categories:
+- Web
+- performance
+thumbnail: /images/response.jpg
+barnar: /images/frame.jpg
 ---
 
 前一篇中主要介绍了在Web资源加载过程一些性能优化的方法, 下面主要介绍渲染过程中可以考虑和采用的一些性能优化方法。

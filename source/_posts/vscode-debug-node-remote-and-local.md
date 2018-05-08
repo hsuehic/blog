@@ -7,7 +7,7 @@ tags:
 - node
 - remote debug
 categories:
-- 前端
+- web
 - node.js
 - IDE
 thumbnail: /images/debugging_hero.png
