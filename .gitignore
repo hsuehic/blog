@@ -7,5 +7,4 @@ public/
 .deploy*/
 .idea/
 .deploy_git/
-themes/icarus/
 *.imls
