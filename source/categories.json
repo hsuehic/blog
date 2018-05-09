@@ -1,0 +1,27 @@
+{
+  "categories": [{
+    "name":"thinking",
+    "desp": "",
+    "children":[]
+  },{
+    "name":"coding",
+    "desp": "",
+    "children":[]
+  },{
+    "name":"writing",
+    "desp": "",
+    "children":[]
+  },{
+    "name":"giving",
+    "desp": "",
+    "children":[]
+  },{
+    "name":"loving",
+    "desp": "",
+    "children":[]
+  },{
+    "name":"sharing",
+    "desp": "",
+    "children":[]
+  }]
+}
