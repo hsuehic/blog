@@ -11,7 +11,7 @@ tags:
 - SystemD
 categories:
 - node.js
-- process manager
+- express
 thumbnail: /images/nodejs.png
 barnar:
 ---
@@ -27,16 +27,16 @@ barnar:
 
 下面是Express应用和其它node.js应用最流行的进程管理器：
 
-- [Forever](https://expressjs.com/en/advanced/pm.html#forever)
-- [PM2](https://expressjs.com/en/advanced/pm.html#pm2)
-- [StrongLoop Process Manager](https://expressjs.com/en/advanced/pm.html#strongloop-process-manager)
-- [SystemD](https://expressjs.com/en/advanced/pm.html#systemd)
+- [Forever](#forever)
+- [PM2](#pm2)
+- [StrongLoop Process Manager](#strongloop-process-manager)
+- [SystemD](#systemd)
 
 使用上述4个中的任一个都非常有帮助，其中StrongLoop Process Manager 是其中唯一提供完整的运行时和部署解决方案的。它管理Node.js应用的整个生命周期，为发布成到生产环境前后的每一步在统一的界面中提供工具。
 
 下面是对于这个工具的简短的介绍。查看更多的详细信息， 参阅 [http://strong-pm.io/compare/](http://strong-pm.io/compare/)。
 
-## Forever
+<h2 id="forever">Forever</h2>
 
 Forever 是一个保证指定脚本持续运行的一个简单的命令行工具。Forever的简洁的界面使它成为一个部署运行小Node.js应用和脚本的好的选项。
 
@@ -85,7 +85,7 @@ $ forever stopall
 
 Forever提供了非常多的设置，也提代的可编程的API。
 
-## PM2
+<h2 id="pm2">PM2</h2>
 
 PM2是一个Node.js应用生产环境的进程管理器，它内置了负载均衡。PM2保持应用一直运行，可以在不停止服务的下重新加载，同时也方便一些通用的系统任务管理。 PM2可以管理应用的日志、监控和集群。
 
@@ -140,7 +140,7 @@ $ pm2 show 0
 ```bash
 $ pm2 delete 0
 ```
-### StrongLoop Process Manager
+<h2 id="strongloop-process-manager">StrongLoop Process Manager</h2>
 
 StrongLoop Process Manage(StrongLoop PM) 是一个Node.js应用生产环境进程管理器。 StrongLoop PM 内置了负载均衡， 监控和多服务器部署，也提提供了一个图形界面的控制台。可以使用StrongLoop PM来完成以下任务：
 
@@ -216,7 +216,7 @@ $ slc ctl soft-restart my-app
 $ slc ctl remove my-app
 ```
 
-## SystemD 
+<h2 id="systemd">SystemD</h2>
 
 ### 介绍
 
