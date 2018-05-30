@@ -148,7 +148,79 @@ requestAnimationFrame方法请求浏览器在下一次重绘之前调用指定�
 ### 组件render方法可以返回数组和字符串
 在以前一个组件render方法返回的根元素只能有一个。如需要返回多个同级元素，需要在外层包一个节点，这样就增加了DOM的层级数，支持数组后，就不存在这个问题了。
 ### 优化了错误处理， 增加了错误边界组件 （Error Boundaries)
+以往， 组件中的JavaScript 错误改变React内部状态，可能会在下次渲染过程中导致不可意料的错误。这睦错误通常是由于应用代码中更早的错误导致的，但是React没有提供一个优雅的方法来处理这些错误，也没有恢复的方法。
+
+部分UI中的JavaScript错误不应该中断整个应用。为了帮助React用户解决这个总是， React 16 引进了一个新的概念“error boundary”.
+
+错误边界组件捕获子组件树中任意位置的JavaScript错误， 记录日志，并显示一个后备的用户界面，而不是导致整个组件树崩溃。 错误边界组件捕获整个组件树的渲染，生命周期方法，和构造函数中的错误。
+
+如果一个组件定义了一个名为componentDidCatch(error, info)的生命周期方法，它就成为了一个错误边界组件：
+
+```JavaScript
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    this.setState({ hasError: true });
+    // You can also log the error to an error reporting service
+    logErrorToMyService(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+```
+可以像其它组件一样使用错误边界组件：
+```JavaScript
+<ErrorBoundary>
+  <MyWidget />
+</ErrorBoundary>
+```
+
 ### 增加了ReactDOM.createPortal方法支持将子Dom树直接渲染到其它的DOM
+
+Portals提供了一个最优的方法来渲染子组件到父DOM节点以外的DOM节点。
+```JavaScript
+ReactDOM.createPortal(child, container)
+```
+通常在一个组件 的render方法中返回一个元素， 这个元素会被挂载到最近的父节点。
+```JavaScript
+render() {
+  // React mounts a new div and renders the children into it
+  return (
+    <div>
+      {this.props.children}
+    </div>
+  );
+}
+```
+然而，有的时候把一个子节点插入到DOM中不同的地方非常有用：
+```JavaScript
+render() {
+  // React does *not* create a new div. It renders the children into `domNode`.
+  // `domNode` is any valid DOM node, regardless of its location in the DOM.
+  return ReactDOM.createPortal(
+    this.props.children,
+    domNode
+  );
+}
+```
+
+一个很典型的场景就是，当父组件有overflow: hidden 或者z-index样式 ，但是你需要子组件在超出容器外可见。 例如， 对话框， 弹出卡片， tooltips。
+
+Portals事件冒泡
+
+一个Portal组件内部事件会传递整个容器的组件树，虽然那些元素在DOM树中不是祖先元素。
+
 ### 流模式的SSR
 ### React DOM 允许非标准的属性
 
