@@ -120,7 +120,6 @@ new Set([Iterable])
 - Set.prototype.entries()
 - Set.prototype.forEach(callbackFn[, thisArg])
 - Set.prototype.has(value)
-- Set.prototype.keys()
 - Set.prototype.values()
 - Set.prototype[@@iterator]
 
