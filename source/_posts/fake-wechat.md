@@ -39,7 +39,7 @@ demo地址：<br />
 
 ![](/images/wechat-1.gif)
 <br />
-![](images/wechat-2.gif)
+![](/images/wechat-2.gif)
 <br />
 
 涉及到的主要技术栈包括：
