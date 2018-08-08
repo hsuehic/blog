@@ -11,6 +11,7 @@ thumbnail: /images/react.png
 ---
 
 直入主题，使用一周的时间使用前端相关的技术做一个仿微信的IM应用。
+<!--more -->
 具体的效果如下：
 线上地址：[ https://chat.gismall.com/](https://chat.gismall.com/)
 前端仓库地址：[https://github.com/hsuehic/react-wechat](https://github.com/hsuehic/react-wechat)
