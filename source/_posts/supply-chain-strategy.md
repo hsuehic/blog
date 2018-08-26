@@ -7,7 +7,7 @@ tags:
 categories:
 - 供应链
 - 战略
-thumbnail: /images/supply-chain.jpg
+thumbnail: /images/supply-chain.jpeg
 barnar:
 ---
 
