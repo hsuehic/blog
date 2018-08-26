@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    
+    <title>前端全栈之路--使用Node.js与React仿微信的视频IM应用 | A coder&#39;s life</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="直入主题，使用一周的时间使用前端相关的技术做一个仿微信的IM应用。">
+<meta name="keywords" content="WebRTC,全栈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端全栈之路--使用Node.js与React仿微信的视频IM应用">
+<meta property="og:url" content="http://www.gistop.com/2018/08/03/fe-full-stack/index.html">
+<meta property="og:site_name" content="A coder&#39;s life">
+<meta property="og:description" content="直入主题，使用一周的时间使用前端相关的技术做一个仿微信的IM应用。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://www.gistop.com/images/react.png">
+<meta property="og:updated_time" content="2018-08-26T06:43:44.967Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端全栈之路--使用Node.js与React仿微信的视频IM应用">
+<meta name="twitter:description" content="直入主题，使用一周的时间使用前端相关的技术做一个仿微信的IM应用。">
+<meta name="twitter:image" content="http://www.gistop.com/images/react.png">
+    
+
+    
+        <link rel="alternate" href="/" title="A coder&#39;s life" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-89449051-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?6ce1aebf3910c970f3ed8db2f18359e1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">A coder&#39;s life</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/images/richard.jpg" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/images/richard.jpg" />
+            <h2 id="name">Richard</h2>
+            <h3 id="title">Thinking, coding and writing. Giving, loving and sharing.</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Hangzhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/hsuehic/">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                24
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                71
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/hsuehic" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class=tooltip>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class=tooltip>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class=tooltip>
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class=tooltip>
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-fe-full-stack" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            前端全栈之路--使用Node.js与React仿微信的视频IM应用
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/08/03/fe-full-stack/">
+            <time datetime="2018-08-03T11:17:26.000Z" itemprop="datePublished">2018-08-03</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/JavaScript/Performance/">Performance</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/WebRTC/">WebRTC</a>, <a class="tag-link" href="/tags/全栈/">全栈</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>直入主题，使用一周的时间使用前端相关的技术做一个仿微信的IM应用。<br><a id="more"></a><br>具体的效果如下：<br>线上地址：<a href="https://chat.gismall.com/" target="_blank" rel="noopener"> https://chat.gismall.com/</a><br>前端仓库地址：<a href="https://github.com/hsuehic/react-wechat" target="_blank" rel="noopener">https://github.com/hsuehic/react-wechat</a><br>后端仓库地址：<a href="https://github.com/hsuehic/react-wechat-backend" target="_blank" rel="noopener">https://github.com/hsuehic/react-wechat-backend</a><br><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d1858e417a491b43b2047cd7393c0594.gif" alt="wechat-2-0-30.gif"></p>
+<p>涉及的技术主要包括以下：</p>
+<ul>
+<li>React</li>
+<li>Dva</li>
+<li>Antd-Mobile</li>
+<li>NodeJS</li>
+<li>Koa</li>
+<li>WebSocket</li>
+<li>WebRTC</li>
+<li>JsonWebToken</li>
+<li>Redis</li>
+<li>MongoDB</li>
+<li>Nginx</li>
+<li>PM2</li>
+</ul>
+<p>想与大的交流的点主包括以下内容：</p>
+<ul>
+<li>WebRTC的一些基本概念</li>
+<li>使用Node.js与WebSocket构建WebRTC信令服务器</li>
+<li>使用NoSQL数据存储设计与关系型数据库的差异</li>
+<li>Node.js应用的发布和热更新</li>
+<li>JSONWebToken在前后端分离应用及WebSocket中鉴权</li>
+</ul>
+<p>欢迎大家拍砖！</p>
+<h2 id="1-WebRTC的一些基本概念"><a href="#1-WebRTC的一些基本概念" class="headerlink" title="1. WebRTC的一些基本概念"></a>1. WebRTC的一些基本概念</h2><h3 id="1-1-WebRTC相关的协议"><a href="#1-1-WebRTC相关的协议" class="headerlink" title="1.1  WebRTC相关的协议"></a>1.1  WebRTC相关的协议</h3><h4 id="1-1-1-ICE"><a href="#1-1-1-ICE" class="headerlink" title="1.1.1 ICE"></a>1.1.1 ICE</h4><p>ICE, 全名 Interactive Connectivity Establishment。是一个允许浏览器之间建议交互的点对点连接的框架。点A与点B之间不能简单直接连接的原因有很多。 首先，需要穿过可能阻止连接的防火墙，其次在大多数情况下设备需要一个唯一的公有地址，另外就是路由器不允许点点对的数据直接传递。ICE使用STUN或者(和)TURN服务器解决这些问题。</p>
+<h4 id="1-1-2-STUN"><a href="#1-1-2-STUN" class="headerlink" title="1.1.2 STUN"></a>1.1.2 STUN</h4><p>STUN, 全名Session Traversal Utilities for NAT (STUN) 。是一个用来发现公共地址和路由对点对点直连限制的服务。<br>客户端(浏览器)向STUN服务器发送一个请求，然后STUN服务器会返回客户端的公网地址和客户端所在路由NAT是否可用。<br><img src="/images/webrtc-stun.png" alt="webrtc-stun.png"></p>
+<h4 id="1-1-3-NAT"><a href="#1-1-3-NAT" class="headerlink" title="1.1.3 NAT"></a>1.1.3 NAT</h4><p>NAT,全名Network Address Translation (NAT) 。是一个网络地址转换协议。就是给连接到路由的设备一个私有地址，并且通路由且的公网IP使用特定端口转发使用设置在公网上可以被发现和访问。有些路由会限连接到私有网络。</p>
+<h4 id="1-1-4-TURN"><a href="#1-1-4-TURN" class="headerlink" title="1.1.4 TURN"></a>1.1.4 TURN</h4><p>TURN全名Traversal Using Relays around NAT (TURN)。有些使用NAT的路由会使用一种被称为“对称NAT”的限制。在这种情况下需要有一个中继服务器分别与终端建立连接并转发数据。<br><img src="/images/webrtc-turn.png" alt="webrtc-turn.png"></p>
+<h4 id="1-1-5-SDP"><a href="#1-1-5-SDP" class="headerlink" title="1.1.5 SDP"></a>1.1.5 SDP</h4><p>SDP全名Session Description Protocol (SDP) 。对多媒体连接的一种标准描述，如分辨率、格式、解码器、加密等，使数据传输时连接两端都了解对方。实质上，SDP是传输数据的元数据。</p>
+<h3 id="1-2-信令和视频呼叫"><a href="#1-2-信令和视频呼叫" class="headerlink" title="1.2 信令和视频呼叫"></a>1.2 信令和视频呼叫</h3><p>WebRTC允许实时点对点的视频传输。</p>
+<h4 id="1-2-1-信令交互时序"><a href="#1-2-1-信令交互时序" class="headerlink" title="1.2.1 信令交互时序"></a>1.2.1 信令交互时序</h4><p><img src="/images/WebRTC-Signaling-Diagram.png" alt="WebRTC - Signaling Diagram.png"></p>
+<h4 id="1-2-2-视频请求交互时序"><a href="#1-2-2-视频请求交互时序" class="headerlink" title="1.2.2 视频请求交互时序"></a>1.2.2 视频请求交互时序</h4><p><img src="/images/WebRTC-ICECandidate-Exchange.png" alt="WebRTC - ICE Candidate Exchange.png"></p>
+<h3 id="1-3-WebRTC主要的接口"><a href="#1-3-WebRTC主要的接口" class="headerlink" title="1.3 WebRTC主要的接口"></a>1.3 WebRTC主要的接口</h3><h4 id="1-3-1-RTCPeerConnection"><a href="#1-3-1-RTCPeerConnection" class="headerlink" title="1.3.1 RTCPeerConnection"></a>1.3.1 RTCPeerConnection</h4><p>表示本地设备到远端的WebRTC连接。提供了连接到远端Peer的方法，维护、监视、关闭连接等。</p>
+<h4 id="1-3-2-RTCConfiguration"><a href="#1-3-2-RTCConfiguration" class="headerlink" title="1.3.2 RTCConfiguration"></a>1.3.2 RTCConfiguration</h4><p>RTCPeerConnection的配置信息。</p>
+<h4 id="1-3-3-RTCDataChannel"><a href="#1-3-3-RTCDataChannel" class="headerlink" title="1.3.3 RTCDataChannel"></a>1.3.3 RTCDataChannel</h4><p>关连到RTCPeerConnection的通道，用来传输任意类型的数据。</p>
+<h2 id="2-使用Node-js与WebSocket构建WebRTC信令服务器"><a href="#2-使用Node-js与WebSocket构建WebRTC信令服务器" class="headerlink" title="2. 使用Node.js与WebSocket构建WebRTC信令服务器"></a>2. 使用Node.js与WebSocket构建WebRTC信令服务器</h2><h3 id="2-1-Koa-Websock中间件"><a href="#2-1-Koa-Websock中间件" class="headerlink" title="2.1 Koa Websock中间件"></a>2.1 Koa Websock中间件</h3><p>需要使用koa支持websocket路由以及上下文使用。相关的middleware代码如下。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @File   : koa-websocket.js</span></span><br><span class="line"><span class="comment"> * @Author : Richard Hsueh &lt;xiaowei.hsueh@gmail.com&gt; (https://www.gistop.com/)</span></span><br><span class="line"><span class="comment"> * @Link   : http://www.gistop.com/</span></span><br><span class="line"><span class="comment"> * @Date   : 2018-7-1 16:31:26</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"><span class="keyword">const</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</span><br><span class="line"><span class="keyword">const</span> compose = <span class="built_in">require</span>(<span class="string">'koa-compose'</span>);</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>);</span><br><span class="line"><span class="keyword">const</span> ws = <span class="built_in">require</span>(<span class="string">'ws'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> WebSocketServer = ws.Server;</span><br><span class="line"><span class="keyword">const</span> debug = <span class="built_in">require</span>(<span class="string">'debug'</span>)(<span class="string">'koa:websockets'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">KoaWebSocketServer</span>(<span class="params">app</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.app = app;</span><br><span class="line">  <span class="keyword">this</span>.middleware = [];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">KoaWebSocketServer.prototype.listen = <span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.server = <span class="keyword">new</span> WebSocketServer(options);</span><br><span class="line">  <span class="keyword">this</span>.server.on(<span class="string">'connection'</span>, <span class="keyword">this</span>.onConnection.bind(<span class="keyword">this</span>));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">KoaWebSocketServer.prototype.onConnection = <span class="function"><span class="keyword">function</span> <span class="title">onConnection</span>(<span class="params">socket, req</span>) </span>&#123;</span><br><span class="line">  debug(<span class="string">'Connection received'</span>);</span><br><span class="line">  socket.on(<span class="string">'error'</span>, err =&gt; &#123;</span><br><span class="line">    debug(<span class="string">'Error occurred:'</span>, err);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">const</span> fn = co.wrap(compose(<span class="keyword">this</span>.middleware));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> context = <span class="keyword">this</span>.app.createContext(req);</span><br><span class="line">  context.websocket = socket;</span><br><span class="line">  context.path = url.parse(req.url).pathname;</span><br><span class="line"></span><br><span class="line">  fn(context).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    debug(err);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">KoaWebSocketServer.prototype.use = <span class="function"><span class="keyword">function</span> <span class="title">use</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.middleware.push(fn);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> <span class="title">middleware</span>(<span class="params">app, wsOptions, httpsOptions</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> oldListen = app.listen;</span><br><span class="line">  app.listen = <span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    debug(<span class="string">'Attaching server...'</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> httpsOptions === <span class="string">'object'</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> httpsServer = https.createServer(httpsOptions, app.callback());</span><br><span class="line">      app.server = httpsServer.listen(...args);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      app.server = oldListen.apply(app, args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> options = &#123; <span class="attr">server</span>: app.server &#125;;</span><br><span class="line">    <span class="keyword">if</span> (wsOptions) &#123;</span><br><span class="line">      <span class="built_in">Object</span>.keys(wsOptions).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">Object</span>.prototype.hasOwnProperty.call(wsOptions, key)) &#123;</span><br><span class="line">          options[key] = wsOptions[key];</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    app.ws.listen(options);</span><br><span class="line">    <span class="keyword">return</span> app.server;</span><br><span class="line">  &#125;;</span><br><span class="line">  app.ws = <span class="keyword">new</span> KoaWebSocketServer(app);</span><br><span class="line">  <span class="keyword">return</span> app;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-2-聊天功能及信令转发实现"><a href="#2-2-聊天功能及信令转发实现" class="headerlink" title="2.2 聊天功能及信令转发实现"></a>2.2 聊天功能及信令转发实现</h3><h4 id="2-2-1-信令类型定义"><a href="#2-2-1-信令类型定义" class="headerlink" title="2.2.1 信令类型定义"></a>2.2.1 信令类型定义</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> RTC_MESSAGE_TYPE = &#123;</span><br><span class="line">  CANDIDATE: <span class="string">'new-ice-candidate'</span>,</span><br><span class="line">  HANG_UP: <span class="string">'hang-up'</span>,</span><br><span class="line">  VIDEO_OFFER: <span class="string">'video-offer'</span>,</span><br><span class="line">  VIDEO_ANSWER: <span class="string">'video-answer'</span>,</span><br><span class="line">  INVITE_OFFER: <span class="string">'invite-offer'</span>,</span><br><span class="line">  INVITE_ACCEPT: <span class="string">'invite-accept'</span>,</span><br><span class="line">  INVITE_REFUSE: <span class="string">'invite-refuse'</span>,</span><br><span class="line">  INVITE_CANCEL: <span class="string">'invite-cancel'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-2-WebSocket路由及消息处理"><a href="#2-2-2-WebSocket路由及消息处理" class="headerlink" title="2.2.2 WebSocket路由及消息处理"></a>2.2.2 WebSocket路由及消息处理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">websocket.get(<span class="string">'/wechat/:token'</span>, <span class="keyword">async</span>(ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; token &#125; = ctx.params;</span><br><span class="line">  <span class="keyword">const</span> &#123; secret &#125; = configs;</span><br><span class="line">  <span class="keyword">const</span> user = <span class="keyword">await</span> verify(token, secret, &#123; <span class="attr">ignoreExpiration</span>: <span class="literal">true</span> &#125;);</span><br><span class="line">  ctx.mongo = mongo;</span><br><span class="line">  <span class="comment">// 已经登录通过难</span></span><br><span class="line">  <span class="keyword">if</span> (user) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; phone &#125; = user;</span><br><span class="line">    sockets.set(phone, ctx.websocket);</span><br><span class="line">    <span class="keyword">await</span> sendInitialData(ctx, user);</span><br><span class="line">    ctx.websocket.on(<span class="string">'message'</span>, message =&gt; &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> msg = <span class="built_in">JSON</span>.parse(message);</span><br><span class="line">        <span class="keyword">const</span> &#123; type &#125; = msg;</span><br><span class="line">        <span class="keyword">const</span> &#123; payload &#125; = msg;</span><br><span class="line">        <span class="keyword">const</span> &#123; to &#125; = payload;</span><br><span class="line">        <span class="keyword">switch</span> (type) &#123;</span><br><span class="line">          <span class="keyword">case</span> <span class="string">'candidate'</span>:</span><br><span class="line">            sendCandidate(ctx, user, msg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          <span class="keyword">case</span> <span class="string">'wechat/saveMessage'</span>:</span><br><span class="line">            sendMessage(ctx, user, msg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.CANDIDATE:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.HANG_UP:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.VIDEO_OFFER:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.VIDEO_ANSWER:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.INVITE_ACCEPT:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.INVITE_CANCEL:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.INVITE_OFFER:</span><br><span class="line">          <span class="keyword">case</span> RTC_MESSAGE_TYPE.INVITE_REFUSE:</span><br><span class="line">            sendMessageToClient(to, message);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(e);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    ctx.websocket.on(<span class="string">'close'</span>, () =&gt; &#123;</span><br><span class="line">      sockets.delete(phone);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 未登录的情况直接关闭socket链接</span></span><br><span class="line">    ctx.websocket.close();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-3-离线消息处理"><a href="#2-2-3-离线消息处理" class="headerlink" title="2.2.3 离线消息处理"></a>2.2.3 离线消息处理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 保存离线消息</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; ctx 上下文</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; user 当前会话用户</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; msg 消息对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> saveOfflineMessage = <span class="keyword">async</span>(ctx, user, msg) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  <span class="keyword">const</span> &#123; payload &#125; = msg;</span><br><span class="line">  <span class="keyword">const</span> &#123; to, content, <span class="keyword">from</span>, timestamp &#125; = payload;</span><br><span class="line">  <span class="keyword">const</span> &#123; phone &#125; = user;</span><br><span class="line">  <span class="keyword">const</span> conversationModel = <span class="keyword">new</span> ConversationModel(ctx);</span><br><span class="line">  <span class="keyword">const</span> selector = &#123;</span><br><span class="line">    phone: to</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> prefix = <span class="string">`conversation.<span class="subst">$&#123;phone&#125;</span>`</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="built_in">document</span> = &#123;</span><br><span class="line">    $set: &#123;</span><br><span class="line">      [<span class="string">`<span class="subst">$&#123;prefix&#125;</span>.timestamp`</span>]: now.getTime()</span><br><span class="line">    &#125;,</span><br><span class="line">    $inc: &#123;</span><br><span class="line">      [<span class="string">`<span class="subst">$&#123;prefix&#125;</span>.newCount`</span>]: <span class="number">1</span></span><br><span class="line">    &#125;,</span><br><span class="line">    $addToSet: &#123;</span><br><span class="line">      [<span class="string">`<span class="subst">$&#123;prefix&#125;</span>.items`</span>]: &#123;</span><br><span class="line">        content,</span><br><span class="line">        to,</span><br><span class="line">        <span class="keyword">from</span>,</span><br><span class="line">        timestamp</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> options = &#123;</span><br><span class="line">    upsert: <span class="literal">true</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> p = conversationModel.update(selector, <span class="built_in">document</span>, options);</span><br><span class="line">  p.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'保存离线消息成功！'</span>);</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'保存离线消息失败！'</span>);</span><br><span class="line">    <span class="built_in">console</span>.error(error);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-4-初始化数据"><a href="#2-2-4-初始化数据" class="headerlink" title="2.2.4 初始化数据"></a>2.2.4 初始化数据</h4><p>主要包括联系人信息和离线会话<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 发送初始化数据</span></span><br><span class="line"><span class="comment"> * @param &#123;Application&#125; ctx 上下文对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> sendInitialData = <span class="keyword">async</span>(ctx, user) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> userModel = <span class="keyword">new</span> UserModel(ctx, user);</span><br><span class="line">  <span class="keyword">const</span> conversations = <span class="keyword">await</span> userModel.getConversationList();</span><br><span class="line">  <span class="keyword">if</span> (conversations) &#123;</span><br><span class="line">    ctx.websocket.send(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">      type: <span class="string">'wechat/saveConversation'</span>,</span><br><span class="line">      payload: &#123;</span><br><span class="line">        conversations</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> contacts = <span class="keyword">await</span> userModel.getContactList();</span><br><span class="line">  ctx.websocket.send(<span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">    type: <span class="string">'wechat/save'</span>,</span><br><span class="line">    payload: &#123;</span><br><span class="line">      contacts</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-使用NoSQL数据存储设计与关系型数据库的差异"><a href="#3-使用NoSQL数据存储设计与关系型数据库的差异" class="headerlink" title="3. 使用NoSQL数据存储设计与关系型数据库的差异"></a>3. 使用NoSQL数据存储设计与关系型数据库的差异</h2><blockquote>
+<p>IM应用中需要存储类似于用户、联系人、对话、对话内容、联系人设置等信息</p>
+</blockquote>
+<p>在以前使用关系型型数据库时代，我们可能会根据范式思想使用不少映射表来存类似于朋友、对话、备注、设置等信息，在二维的信息中表示关系可能会很复杂，为检索性能需要小心的设置索引，查询时也需要做很多的连接查询。</p>
+<p>在NoSQL时代，MongoDB等非关系型数据库，支持以Document的形式存储数据，可以很方便的以JSON节点的形式表示对象之的关系，也支持复杂、功能丰富的子节点检索功能，在数据结构的设计方面比RDB有很大的优势。<br>比事以下是一个聊天信息的数据结构。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">/* 3 */</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_id"</span> : ObjectId(<span class="string">"5b483da404739f15a38387ed"</span>),</span><br><span class="line">    <span class="attr">"phone"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">    <span class="attr">"conversation"</span> : &#123;</span><br><span class="line">        <span class="attr">"18958067917"</span> : &#123;</span><br><span class="line">            <span class="attr">"items"</span> : [ </span><br><span class="line">                <span class="string">"你好！"</span>, </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"content"</span> : <span class="string">"fdfdfd"</span>,</span><br><span class="line">                    <span class="attr">"to"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">                    <span class="attr">"from"</span> : <span class="string">"18958067917"</span>,</span><br><span class="line">                    <span class="attr">"timestamp"</span> : <span class="number">1533300341213.0</span></span><br><span class="line">                &#125;, </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"content"</span> : <span class="string">"fjdlfjd;"</span>,</span><br><span class="line">                    <span class="attr">"to"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">                    <span class="attr">"from"</span> : <span class="string">"18958067917"</span>,</span><br><span class="line">                    <span class="attr">"timestamp"</span> : <span class="number">1533300342076.0</span></span><br><span class="line">                &#125;, </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"content"</span> : <span class="string">"fdjfldjf"</span>,</span><br><span class="line">                    <span class="attr">"to"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">                    <span class="attr">"from"</span> : <span class="string">"18958067917"</span>,</span><br><span class="line">                    <span class="attr">"timestamp"</span> : <span class="number">1533300342933.0</span></span><br><span class="line">                &#125;, </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"content"</span> : <span class="string">"fjdkj;"</span>,</span><br><span class="line">                    <span class="attr">"to"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">                    <span class="attr">"from"</span> : <span class="string">"18958067917"</span>,</span><br><span class="line">                    <span class="attr">"timestamp"</span> : <span class="number">1533300343925.0</span></span><br><span class="line">                &#125;, </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"content"</span> : <span class="literal">null</span>,</span><br><span class="line">                    <span class="attr">"to"</span> : <span class="string">"18958067915"</span>,</span><br><span class="line">                    <span class="attr">"from"</span> : <span class="string">"18958067917"</span>,</span><br><span class="line">                    <span class="attr">"timestamp"</span> : <span class="number">1533300344110.0</span></span><br><span class="line">                &#125;</span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"timestamp"</span> : <span class="number">1533300344110.0</span>,</span><br><span class="line">            <span class="attr">"newCount"</span> : <span class="number">6.0</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"18958067916"</span> : &#123;</span><br><span class="line">            <span class="attr">"items"</span> : [ </span><br><span class="line">                <span class="string">"你好！"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"timestamp"</span> : <span class="number">1531460398135.0</span>,</span><br><span class="line">            <span class="attr">"newCount"</span> : <span class="number">1.0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>后面有时间再针对这个IM应用的数据结构设计展开介绍。</p>
+<h2 id="4-Node-js应用的发布和热更新"><a href="#4-Node-js应用的发布和热更新" class="headerlink" title="4. Node.js应用的发布和热更新"></a>4. Node.js应用的发布和热更新</h2><p>先贴上代码(deploy.sh)。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Author : Richard</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Copyright (c) Tutorialspoint.com</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Script follows here:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Reference: https://www.tutorialspoint.com/unix/unix-file-management.htm</span></span><br><span class="line"></span><br><span class="line">echo upload files to the server</span><br><span class="line"></span><br><span class="line">echo copy scripts</span><br><span class="line">host=www.gismall.com</span><br><span class="line">root=/root/apps/wechat</span><br><span class="line">distination=root@$host:$root</span><br><span class="line">scp -r ./bin $distination</span><br><span class="line">scp -r ./controllers $distination</span><br><span class="line">scp -r ./middlewares $distination</span><br><span class="line">scp -r ./models $distination</span><br><span class="line">scp -r ./routes $distination</span><br><span class="line">scp -r ./services $distination</span><br><span class="line">scp -r ./utils $distination</span><br><span class="line">scp -r ./views $distination</span><br><span class="line">scp app.js $distination</span><br><span class="line">scp configs.js $distination</span><br><span class="line">scp package-lock.json $distination</span><br><span class="line">scp package.json $distination</span><br><span class="line">scp README.md $distination</span><br><span class="line">scp yarn.lock $distination</span><br><span class="line">ssh root@$host &lt;&lt; remotessh</span><br><span class="line">  cd $root</span><br><span class="line">  npm install</span><br><span class="line">  pm2 restart wechat</span><br><span class="line">  exit</span><br><span class="line">remotessh</span><br></pre></td></tr></table></figure></p>
+<p>以上代码只是我发布我服务器端应用的代码。<br>更新发布时只要执行以下代码就行了。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./deploy.sh</span><br></pre></td></tr></table></figure></p>
+<p>更新只是合适pm2直拉重启，很low的方法与Node.js的热更新无关。<br>下面再谈谈我了解的Node.js应用热更新。</p>
+<h2 id="5-JSONWebToken在前后端分离应用及WebSocket中鉴权"><a href="#5-JSONWebToken在前后端分离应用及WebSocket中鉴权" class="headerlink" title="5. JSONWebToken在前后端分离应用及WebSocket中鉴权"></a>5. JSONWebToken在前后端分离应用及WebSocket中鉴权</h2><blockquote>
+<p>JSON Web Token (JWT) is a compact, URL-safe means of representing<br>   claims to be transferred between two parties.  The claims in a JWT<br>   are encoded as a JSON object that is used as the payload of a JSON<br>   Web Signature (JWS) structure or as the plaintext of a JSON Web<br>   Encryption (JWE) structure, enabling the claims to be digitally<br>   signed or integrity protected with a Message Authentication Code<br>   (MAC) and/or encrypted.</p>
+</blockquote>
+<p>以上是JSONWebToken的定义</p>
+<h3 id="5-1-Json-Web-Token是干什么"><a href="#5-1-Json-Web-Token是干什么" class="headerlink" title="5.1  Json Web Token是干什么"></a>5.1  Json Web Token是干什么</h3><pre><code> 简称JWT，在HTTP通信过程中，进行身份认证。
+ 我们知道HTTP通信是无状态的，因此客户端的请求到了服务端处理完之后是无法返回给原来的客户端。因此需要对访问的客户端进行识别，常用的做法是通过session机制：客户端在服务端登陆成功之后，服务端会生成一个sessionID，返回给客户端，客户端将sessionID保存到cookie中，再次发起请求的时候，携带cookie中的sessionID到服务端，服务端会缓存该session（会话），当客户端请求到来的时候，服务端就知道是哪个用户的请求，并将处理的结果返回给客户端，完成通信。
+通过上面的分析，可以知道session存在以下问题：
+1. session保存在服务端，当客户访问量增加时，服务端就需要存储大量的session会话，对服务器有很大的考验；
+2. 当服务端为集群时，用户登陆其中一台服务器，会将session保存到该服务器的内存中，但是当用户的访问到其他服务器时，会无法访问，通常采用缓存一致性技术来保证可以共享，或者采用第三方缓存来保存session，不方便。
+</code></pre><h3 id="5-2-Json-Web-Token是怎么做的"><a href="#5-2-Json-Web-Token是怎么做的" class="headerlink" title="5.2 Json Web Token是怎么做的"></a>5.2 Json Web Token是怎么做的</h3><pre><code>1. 客户端通过用户名和密码登录服务器；
+2. 服务端对客户端身份进行验证；
+3. 服务端对该用户生成Token，返回给客户端；
+4. 客户端将Token保存到本地浏览器，一般保存到cookie中；
+5. 客户端发起请求，需要携带该Token；
+6. 服务端收到请求后，首先验证Token，之后返回数据。
+- 服务端不需要保存Token，只需要对Token中携带的信息进行验证即可；
+- 无论客户端访问后台的那台服务器，只要可以通过用户信息的验证即可。
+</code></pre><h3 id="5-3-WebSocket-连时通过-JSON-Web-Token-鉴权"><a href="#5-3-WebSocket-连时通过-JSON-Web-Token-鉴权" class="headerlink" title="5.3 WebSocket 连时通过 JSON Web Token 鉴权"></a>5.3 WebSocket 连时通过 JSON Web Token 鉴权</h3><p>这一块我没有找到什么好的方法实现。<br>我目前的实现方法是在websocket连接的路由中加上token, 服务器端在接到连接请求时，判断token是否有效，如有效则发送相应的数据并保存连接，如token无效则关闭连接。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://www.gistop.com/2018/08/03/fe-full-stack/" data-id="cjlan5zui000ckdyast5csgl7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://www.gistop.com/2018/08/03/fe-full-stack/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="http://www.gistop.com/2018/08/03/fe-full-stack/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/08/26/supply-chain-strategy/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    供应链战略
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/07/08/fake-wechat/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">手把手教你用React和NodeJS开发一个仿微信的IM应用（一）</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+<div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/08/26/supply-chain-strategy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/supply-chain.jpg)" alt="供应链战略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/供应链/">供应链</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/供应链/战略/">战略</a></p>
+                            <p class="item-title"><a href="/2018/08/26/supply-chain-strategy/" class="title">供应链战略</a></p>
+                            <p class="item-date"><time datetime="2018-08-26T07:00:26.000Z" itemprop="datePublished">2018-08-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/08/03/fe-full-stack/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/react.png)" alt="前端全栈之路--使用Node.js与React仿微信的视频IM应用" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/JavaScript/">JavaScript</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/JavaScript/Performance/">Performance</a></p>
+                            <p class="item-title"><a href="/2018/08/03/fe-full-stack/" class="title">前端全栈之路--使用Node.js与React仿微信的视频IM应用</a></p>
+                            <p class="item-date"><time datetime="2018-08-03T11:17:26.000Z" itemprop="datePublished">2018-08-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/08/fake-wechat/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/pwa.png)" alt="手把手教你用React和NodeJS开发一个仿微信的IM应用（一）" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Web/">Web</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Web/Web-Application/">Web Application</a></p>
+                            <p class="item-title"><a href="/2018/07/08/fake-wechat/" class="title">手把手教你用React和NodeJS开发一个仿微信的IM应用（一）</a></p>
+                            <p class="item-date"><time datetime="2018-07-08T11:27:43.000Z" itemprop="datePublished">2018-07-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/08/ssl-and-nginx-https/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nginx.png)" alt="SSL介绍及Nginx Https配置" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Web/">Web</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Web/Web-Server/">Web Server</a></p>
+                            <p class="item-title"><a href="/2018/07/08/ssl-and-nginx-https/" class="title">SSL介绍及Nginx Https配置</a></p>
+                            <p class="item-date"><time datetime="2018-07-08T11:18:34.000Z" itemprop="datePublished">2018-07-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/08/react-hoc-context-api/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/react.png)" alt="React高阶组件和Context API" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/JavaScript/">JavaScript</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/JavaScript/React/">React</a></p>
+                            <p class="item-title"><a href="/2018/07/08/react-hoc-context-api/" class="title">React高阶组件和Context API</a></p>
+                            <p class="item-date"><time datetime="2018-07-08T11:14:21.000Z" itemprop="datePublished">2018-07-08</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/Performance/">Performance</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/React/">React</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mac/">Mac</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Mac/Tools/">Tools</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Web-Application/">Web Application</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Web-Server/">Web Server</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Web/Web-Server/Security/">Security</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/accessibility/">accessibility</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/performance/">performance</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/express/">express</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/express/porformance-and-reliability/">porformance and reliability</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/dom-event/">dom event</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/node-js/">node.js</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/node-js/IDE/">IDE</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/performance/">performance</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/weex/">weex</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/供应链/">供应链</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/供应链/战略/">战略</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/前端/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/生活/格调/">格调</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/记录/">记录</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2016/">2016</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Antd-mobile/">Antd-mobile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bubble/">Bubble</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Capture/">Capture</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context-API/">Context API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM-Event/">DOM Event</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM3/">DOM3</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ErrorBoundary/">ErrorBoundary</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Event-Phrase/">Event Phrase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HOC/">HOC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTPS/">HTTPS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Loading/">Loading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Map/">Map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MutationEvent/">MutationEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MutationObserver/">MutationObserver</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeJS/">NodeJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Number/">Number</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWA/">PWA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Performance/">Performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Polyfill/">Polyfill</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Precache/">Precache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Provider/">Provider</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-16/">React 16</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-unstable-Profiler/">React.unstable_Profiler</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Worker/">Service Worker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Set/">Set</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/">Shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StrongLoop-Process-Manager/">StrongLoop Process Manager</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SystemD/">SystemD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TLS/">TLS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Performance/">Web Performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebRTC/">WebRTC</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebSocket/">WebSocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/accessibility/">accessibility</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/engine/">engine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express-template/">express template</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/forever/">forever</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grace-shutdown/">grace shutdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/health-checks/">health checks</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oh-my-zsh/">oh-my-zsh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/performance/">performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pm2/">pm2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/process-manager/">process manager</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rail/">rail</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reliability/">reliability</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/remote-debug/">remote debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requestAnimationFrame/">requestAnimationFrame</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/">security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/terminus/">terminus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/toLocaleString/">toLocaleString</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vscode/">vscode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-performance/">web performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weex-weexConf/">weex weexConf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zsh/">zsh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务指标/">业务指标</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/供应链管理/">供应链管理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全栈/">全栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/年终总结/">年终总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能指标/">性能指标</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正向预查/">正向预查</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/2016/" style="font-size: 10px;">2016</a> <a href="/tags/Antd-mobile/" style="font-size: 10px;">Antd-mobile</a> <a href="/tags/Bubble/" style="font-size: 10px;">Bubble</a> <a href="/tags/Capture/" style="font-size: 10px;">Capture</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Context-API/" style="font-size: 10px;">Context API</a> <a href="/tags/DOM-Event/" style="font-size: 10px;">DOM Event</a> <a href="/tags/DOM3/" style="font-size: 10px;">DOM3</a> <a href="/tags/ErrorBoundary/" style="font-size: 10px;">ErrorBoundary</a> <a href="/tags/Event-Phrase/" style="font-size: 10px;">Event Phrase</a> <a href="/tags/HOC/" style="font-size: 10px;">HOC</a> <a href="/tags/HTTPS/" style="font-size: 10px;">HTTPS</a> <a href="/tags/Loading/" style="font-size: 10px;">Loading</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/MutationEvent/" style="font-size: 10px;">MutationEvent</a> <a href="/tags/MutationObserver/" style="font-size: 10px;">MutationObserver</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/NodeJS/" style="font-size: 10px;">NodeJS</a> <a href="/tags/Number/" style="font-size: 10px;">Number</a> <a href="/tags/PWA/" style="font-size: 10px;">PWA</a> <a href="/tags/Performance/" style="font-size: 10px;">Performance</a> <a href="/tags/Polyfill/" style="font-size: 10px;">Polyfill</a> <a href="/tags/Precache/" style="font-size: 10px;">Precache</a> <a href="/tags/Provider/" style="font-size: 10px;">Provider</a> <a href="/tags/React/" style="font-size: 20px;">React</a> <a href="/tags/React-16/" style="font-size: 10px;">React 16</a> <a href="/tags/React-unstable-Profiler/" style="font-size: 10px;">React.unstable_Profiler</a> <a href="/tags/SSL/" style="font-size: 10px;">SSL</a> <a href="/tags/Service-Worker/" style="font-size: 10px;">Service Worker</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Shell/" style="font-size: 10px;">Shell</a> <a href="/tags/StrongLoop-Process-Manager/" style="font-size: 10px;">StrongLoop Process Manager</a> <a href="/tags/SystemD/" style="font-size: 10px;">SystemD</a> <a href="/tags/TLS/" style="font-size: 10px;">TLS</a> <a href="/tags/Web/" style="font-size: 20px;">Web</a> <a href="/tags/Web-Performance/" style="font-size: 10px;">Web Performance</a> <a href="/tags/WebRTC/" style="font-size: 15px;">WebRTC</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/accessibility/" style="font-size: 10px;">accessibility</a> <a href="/tags/debug/" style="font-size: 10px;">debug</a> <a href="/tags/engine/" style="font-size: 10px;">engine</a> <a href="/tags/express/" style="font-size: 10px;">express</a> <a href="/tags/express-template/" style="font-size: 10px;">express template</a> <a href="/tags/forever/" style="font-size: 10px;">forever</a> <a href="/tags/grace-shutdown/" style="font-size: 10px;">grace shutdown</a> <a href="/tags/health-checks/" style="font-size: 10px;">health checks</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/node-js/" style="font-size: 15px;">node.js</a> <a href="/tags/oh-my-zsh/" style="font-size: 10px;">oh-my-zsh</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/process-manager/" style="font-size: 10px;">process manager</a> <a href="/tags/rail/" style="font-size: 10px;">rail</a> <a href="/tags/reliability/" style="font-size: 10px;">reliability</a> <a href="/tags/remote-debug/" style="font-size: 10px;">remote debug</a> <a href="/tags/requestAnimationFrame/" style="font-size: 10px;">requestAnimationFrame</a> <a href="/tags/security/" style="font-size: 10px;">security</a> <a href="/tags/terminus/" style="font-size: 10px;">terminus</a> <a href="/tags/toLocaleString/" style="font-size: 10px;">toLocaleString</a> <a href="/tags/vscode/" style="font-size: 10px;">vscode</a> <a href="/tags/web-performance/" style="font-size: 10px;">web performance</a> <a href="/tags/weex-weexConf/" style="font-size: 10px;">weex weexConf</a> <a href="/tags/zsh/" style="font-size: 10px;">zsh</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/业务指标/" style="font-size: 10px;">业务指标</a> <a href="/tags/供应链管理/" style="font-size: 10px;">供应链管理</a> <a href="/tags/全栈/" style="font-size: 10px;">全栈</a> <a href="/tags/年终总结/" style="font-size: 10px;">年终总结</a> <a href="/tags/性能指标/" style="font-size: 10px;">性能指标</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/正向预查/" style="font-size: 10px;">正向预查</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://vue-kit.gismall.com/#!/dashboard">Vue-kit</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://vue-kit.gismall.com/mobile.html#!/index">Vue-kit mobile</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://atui.alibaba.net">ATUI</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Richard Hsueh<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+<script>
+    var disqus_config = function () {
+        
+        this.page.url = 'http://www.gistop.com/2018/08/03/fe-full-stack/';
+        
+        this.page.identifier = 'fe-full-stack';
+    };
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
